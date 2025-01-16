@@ -29,13 +29,13 @@ bot = discord.Bot()
 
 @bot.event
 async def on_ready():
-    print(f"{bot.user} is online!")
+    print(f'{bot.user} is online!')
 
 
-@bot.slash_command(description="Add someone as a recruit")
+@bot.slash_command(description='Add someone as a recruit')
 @commands.has_any_role(*CONFIG['auth_roles']['recruiter'])
 async def recruit(ctx, member: discord.Member, name: str=None):
-    await member.add_roles(ctx.guild.get_role(CONFIG['role_assignments']['recruit']), reason=f"{ctx.author.name} recruited {member.name}")
+    await member.add_roles(ctx.guild.get_role(CONFIG['role_assignments']['recruit']), reason=f'{ctx.author.name} recruited {member.name}')
 
     # Setting new name
     new_name = name or member.nick
@@ -43,10 +43,10 @@ async def recruit(ctx, member: discord.Member, name: str=None):
     await member.edit(nick = f'{new_nick}')
 
     # Telling our caller that the opertion was succesfull
-    await ctx.respond(f"{new_name} as been recruited!", ephemeral=True)
+    await ctx.respond(f'{new_name} as been recruited!', ephemeral=True)
 
 
-@bot.slash_command(description="Used to quickly discharge a user using their user id")
+@bot.slash_command(description='Used to quickly discharge a user using their user id')
 @commands.has_any_role(*CONFIG['auth_roles']['s1'])
 async def discharge(ctx, member: discord.Member, kick: bool=False):
     # Getting our default role and it's position
