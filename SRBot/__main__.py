@@ -14,6 +14,9 @@ from json import loads
 from pathlib import Path
 from typing import Literal, Optional
 
+# Local environment
+from SRBot.SRB.SRB import SRB
+
 # PyPi Libraries
 import discord
 from discord.ext import commands
@@ -65,6 +68,24 @@ async def discharge(ctx, member: discord.Member, kick: bool=False):
 
     # Notifying our caller
     await ctx.respond(f'{old_nick} has been discharged from the unit.')
+
+
+@bot.slash_command(description='Used to view SRB information given a discord ID or DODID')
+@commands.has_any_role(CONFIG['role_assignments']['member'])
+async def member(ctx, member: discord.Member=None, dodid: str=None):
+    if member:
+        member = SRB().get_member(discord_id = member.id)
+    elif dodid:
+        member = SRB().get_member(dodid = dodid)
+    else:
+        embed = discord.Embed(
+            title='SRB Command Error:',
+            description='Must provide an argument to either dodid or discord member parameter.',
+            color=discord.Colour.red(),
+        )
+        await ctx.respond('', ephemeral=True, embed=embed)
+        return
+    await ctx.respond(f'```{member.to_string(index=False)}```')
 
 
 bot.run(dotenv_values('.env')['DISCORD_TOKEN'])
